@@ -1,0 +1,2 @@
+#!/bin/sh
+./kn10-kl inst-klt20.ini

@@ -1,0 +1,90 @@
+Here's some interim notes to get you started:
+
+You can get KLH-10 sources and PDP-10 tapes from trailing-edge.com.
+The main benefit of this distribution that I've build a complete plug
+and play Panda system for Linux with lots of other goodies, and you
+don't have to install tapes and do bugfixes.
+
+Make sure that you have about 600MB free in order to unpack the
+distribution.
+
+After you unpack the distribution, you will have to edit klt20.ini
+right away to change the IP address from 10.0.0.51 to the IP address
+which you will assign to your TOPS-20 system.  This must be a
+different IP address than the host Linux system.
+
+If you have a Panda display panel (from Spare Time Gizmos,
+http://www.sparetimegizmos.com) this distribution supports display on
+the lights.  The file PandaDisplay.jpg is an image that you can print
+and affix to your Panda display.
+
+The high order 3 bits of the LED bar (Aux lights) are used to show the
+approximate system load vs. idle time as a value from 0 (system idle)
+to 7 (system busy).  The low order 36 bits show the traditional PDP-10
+lights (and yes, the LITES% and SWTCH% jsi work, as do the TOPS-10
+LIGHTS and SWITCH UUOs).  The 4 status lights show a CPU heartbeat in
+the upper left (updated as long as the scheduler is running), disk activity
+in the upper right, tape activity in the lower left, and network activity
+in the lower right.  The activity lights reflect activity in the previous
+interval of the heartbeat.
+
+The following instructions assume some minimal level of familiarity with
+TOPS-20.  If you have no experience with TOPS-20 at all, I strongly
+recommend that you get ahold of (at a minimum) the TOPS-20 Commands
+Reference Manual and the TOPS-20 User's Guide.  Although the learning
+curve for TOPS-20 isn't quite a steep as it is for UNIX, there still
+are some things that are very helpful to know.
+
+Once you do this, then run the klt20 script.  Presently, it will say
+"Ready to GO" and you just type GO.  You should then get a BOOT>
+prompt as normal.
+
+Start the system standalone at first:
+	BOOT>/e
+	dbugsw/ 2
+	147$g
+since you have some config stuff to do.  Note that the "$" in 147$g is
+entered by hitting the ESC key (that is, 1 4 7 ESC g) and not the dollar
+sign.  ESC g is the command to the EDDT debugger to jump to a specified
+memory address, and 147 is the normal start address for TOPS-20.
+
+When the system startup is finished, do CTRL/C and log in as user
+OPERATOR, password DEC-20.  Then connect to <system>
+	@log operator dec-20
+	@enable
+	!terminal vt100
+
+You'll need to edit the following files.  EMACS is installed on this system,
+along with TECO and EDIT.  The format of most of these files should be
+obvious, but if you aren't sure please ask questions:
+
+SYSTEM:7-1-CONFIG.CMD		to set your timezone
+SYSTEM:HOSTS.TXT		to define your local host name and network
+SYSTEM:INTERNET.ADDRESS		to define (again!) your IP address -- must
+				 be the same as in klt20.ini.  Also define
+				 your netmask here as LOGICAL-HOST-MASK
+SYSTEM:INTERNET.GATEWAYS	to define your IP gateway
+SYSTEM:MONNAM.TXT		to define your system name
+DOMAIN:RESOLV.CONFIG		to define your DNS servers, your default
+				 domain (replacing MYDOMAIN.COM) and any
+				 users in addition to OPERATOR who can
+				 send control messages to the resolver.
+
+Don't bother with SYSTEM:INTERNET.NAMESERVERS.  That is the configuration
+file for DEC's resolver; although it's simpler it has some interoperability
+problems with MMAILR which haven't been resolved yet.
+
+Create yourself an account too while you're at it.  Don't forget to
+give it WHEEL.  If you don't know how to do this, get ahold of a TOPS-20
+Commands Reference Manual and look up the BUILD command, or look up a
+TOPS-20 System Manager's Reference Manual and look up the ^E CREATE command.
+
+You may also want to run FINGER:DBEDIT and define your personal name.
+
+Now that you've done all that, shut the system down with CTRL/E CEASE
+NOW, wait for it to say "Shutdown complete", then do CTRL-\ SHUT
+followed by CTRL-\ QUIT
+
+Now you're ready to try a production run.  You should be able to
+figure out how to boot it now.  If all goes well, and you've put in
+all the data correctly, you'll have a system up on the Internet.

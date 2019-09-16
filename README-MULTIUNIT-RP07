@@ -1,0 +1,32 @@
+The Panda monitor supports two-unit RP07 structures.  Although TOPS-20 can
+be modified to support four-unit RP07 structures fairly easily, or 16-unit
+RP07 structures with somewhat more work, doing so renders *all* structures
+created by the monitor incompatible with a DEC monitor, including small
+structures.  The benefit of the two-unit patch is that single-unit RP07
+structures remain compatible with the DEC monitor.
+
+You can not create a multi-unit RP07 structure with a DEC monitor, which
+includes the monitor on the installation tape.  You'll know that you made
+this mistake if you get a BTBCRT bughlt from a 143 start and specified two
+RP07 units.  Either you have to make your own installation tape with the
+Panda MONITR.EXE, or you have to make the structure using CHECKD while
+running a Panda monitor.
+
+Since this distribution comes with a pre-built Panda system on a single-unit
+RP07 structure, you shouldn't need to use the installation tape at all (and
+you probably don't want to, since the installation tape has none of the
+Panda changes!).  You can just create a new structure with CHECKD, copy the
+files from your existing PS to the new structure (e.g. using MERLIN) then
+boot from the new structure.
+
+If you like living life in the fast lane, you can also conver the single-unit
+RP07 PS to a two-units PS with a 143 start.  Answer "no" to the "replace"
+command, "yes" to the define command, and make sure that you give the same
+sizes for swap area and bootstrap that were there before.  Once its defined,
+then run CHECKD and have it rebuild the bittable.  If you did everything just
+right, you would have added the new disk without clobbering anything.
+
+The procedure in the previous paragraph is not for the faint of heart.
+
+Note that the changes to do two-unit RP07 structures involve changes to
+the monitor, to CHECKD, and to BOOT.

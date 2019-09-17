@@ -1,6 +1,9 @@
 FROM ubuntu:latest
+LABEL maintainer="alanmimms@gmail.com"
 
-RUN mkdir -p /panda/data
+RUN mkdir -p /panda/data && \
+    apt-get update && \
+    apt-get install -y net-tools iputils-ping telnet
 
 COPY boot.sav dfkfb dfkfb.ini dfkfb-all.savh \
      dpni20 dprpxx dptm03 enaddr inst-klt20 inst-klt20.ini \
@@ -18,4 +21,4 @@ ENV PATH /panda:$PATH
 EXPOSE 13 20 21 23 79
 
 VOLUME /panda/data
-WORKDIR /panda/data
+WORKDIR /panda
